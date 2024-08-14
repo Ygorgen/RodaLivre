@@ -27,8 +27,8 @@ public class Reserva {
     private int dataFim;
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "reserva", cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties("reserva")
-    private List<Carro> carro ;
+	@JsonIgnoreProperties("reserva")
+	private List<Carro> carro;
 
 	public Long getId() {
 		return Id;

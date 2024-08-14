@@ -1,7 +1,6 @@
 package com.rodalivregen.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,6 +43,10 @@ public class Carro {
 	@ManyToOne
 	@JsonIgnoreProperties("carro")
 	private Reserva reserva;
+	
+	@ManyToOne
+	@JsonIgnoreProperties("carro")
+	private Usuario usuario;
 
 	public Long getId() {
 		return Id;
@@ -109,4 +112,13 @@ public class Carro {
 		this.reserva = reserva;
 	}
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	
 }

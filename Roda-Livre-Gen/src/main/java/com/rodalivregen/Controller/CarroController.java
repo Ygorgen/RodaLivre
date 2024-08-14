@@ -37,8 +37,13 @@ public class CarroController {
 	public ResponseEntity<List<Carro>> getByMarca(@PathVariable String marca) {
 		return ResponseEntity.ok(carroRepository.findAllByMarcaContainingIgnoreCase(marca));
 	}
+	
+	@GetMapping("/disponiveis") // lista os carros disponiveis 
+	public ResponseEntity<List<Carro>> getDisponiveis() {
+	    return ResponseEntity.ok(carroRepository.findAllByDisponibilidade(true));
+	}
 
-	@PostMapping
+	@PostMapping //cadastro de carro
 	public ResponseEntity<Carro> post(@Valid @RequestBody Carro carro) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(carroRepository.save(carro));
 	}

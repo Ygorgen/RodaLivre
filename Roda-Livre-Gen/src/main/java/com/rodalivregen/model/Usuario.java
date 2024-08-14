@@ -1,16 +1,15 @@
 package com.rodalivregen.model;
 
+
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -42,9 +41,9 @@ public class Usuario {
 	    @Size(max = 12, message = "O telefone deve conter no máximo 15 caracteres.")
 	    private String telefone;
 	    
-	    @OneToOne(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.REMOVE)
-	    @JsonIgnoreProperties("usuario")
-	    private List<Reserva> reserva;
+	    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.REMOVE)
+		@JsonIgnoreProperties("usuario")
+		private List<Carro> carro;
 
 		public Long getId() {
 			return id;
@@ -94,11 +93,11 @@ public class Usuario {
 			this.telefone = telefone;
 		}
 
-		public List<Reserva> getReserva() {
-			return reserva;
+		public List<Carro> getCarro() {
+			return carro;
 		}
 
-		public void setReserva(List<Reserva> reserva) {
-			this.reserva = reserva;
+		public void setCarro(List<Carro> carro) {
+			this.carro = carro;
 		}
 }

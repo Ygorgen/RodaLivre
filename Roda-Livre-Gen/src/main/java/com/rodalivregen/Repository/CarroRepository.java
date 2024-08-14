@@ -7,5 +7,8 @@ import org.springframework.data.repository.query.Param;
 import com.rodalivregen.model.Carro;
 
 public interface CarroRepository extends JpaRepository<Carro, Long> {
+	
     List<Carro> findAllByMarcaContainingIgnoreCase(@Param("marca") String marca);
+
+    List<Carro> findAllByDisponibilidade(boolean disponibilidade);
 }
