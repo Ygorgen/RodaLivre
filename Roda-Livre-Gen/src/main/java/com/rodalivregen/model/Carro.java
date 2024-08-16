@@ -1,11 +1,14 @@
 package com.rodalivregen.model;
 
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -16,6 +19,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "tb_carros")
 public class Carro {
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
@@ -40,13 +44,9 @@ public class Carro {
 	@Min(value = 0, message = "O preço por dia deve ser positivo.")
 	private double precoPorDia;
 	
-	@ManyToOne
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "carro", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("carro")
-	private Reserva reserva;
-	
-	@ManyToOne
-	@JsonIgnoreProperties("carro")
-	private Usuario usuario;
+	private List<Reserva> reserva;
 
 	public Long getId() {
 		return Id;
@@ -104,21 +104,11 @@ public class Carro {
 		this.precoPorDia = precoPorDia;
 	}
 
-	public Reserva getReserva() {
+	public List<Reserva> getReserva() {
 		return reserva;
 	}
 
-	public void setReserva(Reserva reserva) {
+	public void setReserva(List<Reserva> reserva) {
 		this.reserva = reserva;
 	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	
 }

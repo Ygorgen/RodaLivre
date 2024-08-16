@@ -41,10 +41,6 @@ public class Usuario {
 	    @Size(max = 12, message = "O telefone deve conter no máximo 15 caracteres.")
 	    private String telefone;
 	    
-	    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.REMOVE)
-		@JsonIgnoreProperties("usuario")
-		private List<Carro> carro;
-
 		public Long getId() {
 			return id;
 		}
@@ -93,11 +89,4 @@ public class Usuario {
 			this.telefone = telefone;
 		}
 
-		public List<Carro> getCarro() {
-			return carro;
-		}
-
-		public void setCarro(List<Carro> carro) {
-			this.carro = carro;
-		}
 }

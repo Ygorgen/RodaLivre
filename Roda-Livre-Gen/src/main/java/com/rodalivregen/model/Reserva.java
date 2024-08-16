@@ -1,14 +1,11 @@
 package com.rodalivregen.model;
 
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -26,9 +23,9 @@ public class Reserva {
     @NotNull(message = "A data de fim não pode ser nula.")
     private int dataFim;
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reserva", cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties("reserva")
-	private List<Carro> carro;
+    @OneToOne
+	@JsonIgnoreProperties({"reserva", "reservas"})
+	private Carro carro;
 
 	public Long getId() {
 		return Id;
@@ -54,11 +51,11 @@ public class Reserva {
 		this.dataFim = dataFim;
 	}
 
-	public List<Carro> getCarro() {
+	public Carro getCarro() {
 		return carro;
 	}
 
-	public void setCarro(List<Carro> carro) {
+	public void setCarro(Carro carro) {
 		this.carro = carro;
 	}
 }

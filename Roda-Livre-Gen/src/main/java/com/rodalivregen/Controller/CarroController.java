@@ -28,41 +28,46 @@ public class CarroController {
 	@Autowired
 	private CarroRepository carroRepository;
 
-	@GetMapping
+	@GetMapping // ok
 	public ResponseEntity<List<Carro>> getAll() {
 		return ResponseEntity.ok(carroRepository.findAll());
 	}
-
-	@GetMapping("/marca/{marca}")
-	public ResponseEntity<List<Carro>> getByMarca(@PathVariable String marca) {
-		return ResponseEntity.ok(carroRepository.findAllByMarcaContainingIgnoreCase(marca));
-	}
 	
-	@GetMapping("/disponiveis") // lista os carros disponiveis 
+	@GetMapping("/marca/{marca}") //concertado (ok)
+    public ResponseEntity<List<Carro>> getByMarca(@PathVariable 
+    String marca){
+        return ResponseEntity.ok(carroRepository
+            .findAllByMarcaContainingIgnoreCase(marca));
+        
+    }
+	
+	@GetMapping("/disponiveis") // lista os carros disponiveis (ok) 
 	public ResponseEntity<List<Carro>> getDisponiveis() {
 	    return ResponseEntity.ok(carroRepository.findAllByDisponibilidade(true));
 	}
-
-	@PostMapping //cadastro de carro
-	public ResponseEntity<Carro> post(@Valid @RequestBody Carro carro) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(carroRepository.save(carro));
-	}
+	
+	@PostMapping //ok
+    public ResponseEntity<Carro> post(@Valid @RequestBody Carro carro){
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(carroRepository.save(carro));
+    }
 
 	@PutMapping
-	public ResponseEntity<Carro> put(@Valid @RequestBody Carro carro) {
-		if (carroRepository.existsById(carro.getId())) {
-			return ResponseEntity.status(HttpStatus.OK).body(carroRepository.save(carro));
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-	}
+    public ResponseEntity<Carro> put(@Valid @RequestBody Carro carro){
+        return carroRepository.findById(carro.getId())
+            .map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
+            .body(carroRepository.save(carro)))
+            .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
 
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
-		Optional<Carro> carro = carroRepository.findById(id);
-		if (carro.isEmpty())
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		carroRepository.deleteById(id);
-	}
+	@ResponseStatus(HttpStatus.NO_CONTENT) 
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        Optional<Carro> carro = carroRepository.findById(id);
+        
+        if(carro.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        
+        carroRepository.deleteById(id);              
+    }
 }
