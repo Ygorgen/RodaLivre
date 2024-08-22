@@ -31,7 +31,7 @@ Esse projeto foca em maximizar o uso de carros antigos e novos, oferecendo uma o
 - Axios
 - Tailwind
 
-## 👨‍💻 Desenvolvedores
+## 👨‍💻 Desenvolvedor
 - Ygor Araújo
   [Linkedin](https://www.linkedin.com/in/ygor-araújo-052824242/)
   [GitHub](https://github.com/Ygorgen?tab=repositories)
