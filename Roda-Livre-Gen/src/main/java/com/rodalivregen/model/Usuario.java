@@ -1,15 +1,13 @@
 package com.rodalivregen.model;
 
 
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -38,8 +36,12 @@ public class Usuario {
 	    @Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caracteres")
 	    private String foto;
 	    
-	    @Size(max = 12, message = "O telefone deve conter no máximo 15 caracteres.")
+	    @Size(max = 12, message = "O telefone deve conter no máximo 12 caracteres contando com o ddd.")
 	    private String telefone;
+	    
+	    @OneToOne(mappedBy = "usuario")
+	    @JsonIgnoreProperties("usuario")
+	    private Reserva reserva;
 	    
 		public Long getId() {
 			return id;

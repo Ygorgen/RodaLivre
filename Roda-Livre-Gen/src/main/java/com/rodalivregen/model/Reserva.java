@@ -18,14 +18,17 @@ public class Reserva {
 	private Long Id;
 
     @NotNull(message = "A data de início não pode ser nula.")
-    private int dataInicio;
-
-    @NotNull(message = "A data de fim não pode ser nula.")
-    private int dataFim;
+    private int diasalugados;
+    
+    private float valortotal;
     
     @OneToOne
 	@JsonIgnoreProperties({"reserva", "reservas"})
 	private Carro carro;
+    
+    @OneToOne
+    @JsonIgnoreProperties("reserva")
+    private Usuario usuario;
 
 	public Long getId() {
 		return Id;
@@ -35,20 +38,20 @@ public class Reserva {
 		Id = id;
 	}
 
-	public int getDataInicio() {
-		return dataInicio;
+	public int getDiasalugados() {
+		return diasalugados;
 	}
 
-	public void setDataInicio(int dataInicio) {
-		this.dataInicio = dataInicio;
+	public void setDiasalugados(int diasalugados) {
+		this.diasalugados = diasalugados;
 	}
 
-	public int getDataFim() {
-		return dataFim;
+	public float getValortotal() {
+		return valortotal;
 	}
 
-	public void setDataFim(int dataFim) {
-		this.dataFim = dataFim;
+	public void setValortotal(float valortotal) {
+		this.valortotal = valortotal;
 	}
 
 	public Carro getCarro() {
@@ -57,5 +60,13 @@ public class Reserva {
 
 	public void setCarro(Carro carro) {
 		this.carro = carro;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 }

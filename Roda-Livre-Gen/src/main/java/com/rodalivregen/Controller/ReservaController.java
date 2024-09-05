@@ -27,88 +27,62 @@ import jakarta.validation.Valid;
 @RequestMapping("/reservas")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ReservaController {
-	
+
 	@Autowired
 	private ReservaRepository reservaRepository;
-	
+
 	@Autowired
 	private CarroRepository carroRepository;
-	
+
 	@GetMapping
 	public ResponseEntity<List<Reserva>> getAll() {
 		return ResponseEntity.ok(reservaRepository.findAll());
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Reserva> getByid(@PathVariable Long id) {
-		return reservaRepository.findById(id)
-				.map(resposta -> ResponseEntity.ok(resposta))
+		return reservaRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<Reserva> post(@Valid @RequestBody Reserva reserva) {
-	    return carroRepository.findById(reserva.getCarro().getId())
-	        .map(carro -> {
-	            if (!carro.isDisponibilidade()) {
-	                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Carro Indisponivel!", null);
-	            }
-	            carro.setDisponibilidade(false);
-	            carroRepository.save(carro);
-	            reserva.setCarro(carro);
-	            return ResponseEntity.status(HttpStatus.CREATED).body(reservaRepository.save(reserva));
-	        })
-	        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Carro não Encontrado!", null));
+		return carroRepository.findById(reserva.getCarro().getId()).map(carro -> {
+			if (!carro.isDisponibilidade()) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Carro Indisponível!", null);
+			}
+			float valorTotal = (float) (reserva.getDiasalugados() * carro.getPrecoPorDia());
+			reserva.setValortotal(valorTotal);
+
+			carro.setDisponibilidade(false);
+			carroRepository.save(carro);
+
+			reserva.setCarro(carro);
+			return ResponseEntity.status(HttpStatus.CREATED).body(reservaRepository.save(reserva));
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Carro não Encontrado!", null));
 	}
-	
+
 	@PutMapping
-    public ResponseEntity<Reserva> put(@Valid @RequestBody Reserva reserva){
-        return reservaRepository.findById(reserva.getId())
-            .map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
-            .body(reservaRepository.save(reserva)))
-            .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    }
-	
+	public ResponseEntity<Reserva> put(@Valid @RequestBody Reserva reserva) {
+		return reservaRepository.findById(reserva.getId())
+				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(reservaRepository.save(reserva)))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	}
+
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
-	    Optional<Reserva> reserva = reservaRepository.findById(id);
+		Optional<Reserva> reserva = reservaRepository.findById(id);
 
-	    if(reserva.isEmpty()) {
-	        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-	    }
+		if (reserva.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
 
-	    Carro carro = reserva.get().getCarro();
+		Carro carro = reserva.get().getCarro();
 
-	    carro.setDisponibilidade(true);
-	    carroRepository.save(carro);
+		carro.setDisponibilidade(true);
+		carroRepository.save(carro);
 
-	    reservaRepository.deleteById(id);
+		reservaRepository.deleteById(id);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
